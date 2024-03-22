@@ -1,0 +1,381 @@
+;1. Premiers pas
+;	1.1 Evaluations
+;Evaluation des expressions suivantes
+
+; (a) 3 + 4
+(+ 3 4) ;---> 7
+
+; (b) 3.2 * 5.6
+
+(* 3.2 5.6)  ;---> 17,92
+
+;(c) 3/4 - 5/6
+(- (/ 3 4) (/ 5 6 ))  ;---> -1/12
+
+;	1.2 Arguments facultatifs ou nombre arbibraire d'arguments
+;*Evaluer
+
+; (a) 1 + 2 + 3 + 4
+(+ 1 2 3 4) ---> 10
+
+; (b) maximum (1, 2, 3, (100 + 50), 75, -3) 
+(max(1 2 3 (+ 100 50) 75 -3)) ---> 150
+
+;Deviner le résultat et tester les expressions suivantes :
+
+(a) (+) ==> 0 ; element neutre de +
+(b) (*) ==> 1 ; element neutre de *
+(c) (/ 2) ==> 1/2 
+(d) (* 2) ==> 2
+
+	;1.3 Quelques fonctions
+;(a) Implémenter les fonctions suivantes
+
+; x + 5
+(defun plus5(x) (+ x 5)) ; (plus5 30) ---> 35
+
+; 2. Valeur absolue
+
+(defun absolue (x)
+	(if (>= x 0)
+		x
+		(* x -1)
+		)
+)
+; USAGE (absolue 5)
+; USAGE (ABSOLUE -5)
+; USAGE (aBsoluE 0)
+; trois appelle de la fonction avec des nom different pour tester la sensibilite a la casse
+
+;3. Moyenne de deux nombres
+( defun moyenne(x y ) (/ (+ x y) 2))
+; USAGE (moyenne 5 6)
+
+   p
+4. ∑ i
+   i=n
+ ; somme (4 ,9 ) = 4+5+6+7+8+9
+(defun somme (n p)
+    
+    (if (= n p)
+    	n 
+	(+ n (somme (+ n 1) p))
+    	)
+	)
+
+;	3. fonctions
+;	3.1 Récursivité simple
+
+;(a) Définir la fonction membre(x L) qui cherche l'élement x dans 
+;la liste, s'il s'y trouve elle retourne la sous-liste commençant 
+;par x sinon elle retourne nil
+
+(defun membre (x l) 
+	(if (atom l) 
+		nil
+		( (if (eql x (car l)
+			l 
+			(membre x (cdr l) ) ) ) ) ) )
+
+;(b) Définir la fonction « supprimer(x L)» qui enlève toutes les occurrences d’une valeur,
+;c’est à dire qui retourne une copie de la liste en sautant les occurrences en question. . Par
+;exemple :
+;(supprimer 1 '(3 1 4 1 5))   (3 4 5) 
+
+ (defun supprime ( x l) 
+ 	 ( if ( atom l )
+ 	 	nil
+ 	 	 (if (eql x (car l) 
+ 	 	 	(supprime x (cdr l)) 
+ 	 	 	(cons (car l)(supprime x (cdr l))) 
+ 	 	 	))))
+
+; (c) Ecrire la fonction <<dernier(L)>> qui renvoie le dernier element d'une
+;liste
+
+;; SI LE RESTE DE LA LISTE EST VIDE ON RENVOIE LE PREMIER ELEMENT DE LA LIST
+(defun dernier (l) 
+	(if (atom l) 
+		nil 
+		(if (null (cdr l) )
+	 (car l)
+	 (dernier (cdr l) ) ))	)
+
+;; Difference enntre Nil et Null :
+;"Nil" est un symbole qui représente la valeur de la liste vide et la fausseté logique.
+;"Null" est une fonction Lisp qui teste si un argument est la liste vide ou non.
+
+(d) Définir la fonction <<nième(n L)>> qui retourne le nième element de la liste
+;; POUR CHAQUE APPELLE ON DIMINUE n JUSQU'A CE QUE n SOIT EGAL A 1 ON ENVOIE LE PREMIER ELEMENT DE LA LIST
+
+(defun nieme (n l) 
+	(if (or (null l) (< n 1) 
+		nil 
+		(if (= n 1) )
+		(car l) 
+		(nieme (- n 1) (cdr l)) 
+		) )
+)
+(e) Définir la fonction <<nièmecdr(n L)>> similaire à la précédente mais
+retourne le nième cdr de la liste
+( defun niemeCDR (n l) 
+	(if (or (null l) (< n 1) 
+
+		nil 
+		(if (= n 1) 
+			(cdr l) 
+			(niemeCDR (-n 1) (cdr l))
+			))))
+;(nièmecdr 3 '(1 2 (3 4) 5)) ; renvoie (3 4)
+
+
+(f) Définir la fonction <<indice(x L)>> similaire à <<membre>> mais renvoie 
+la position de l'element cherché
+
+(defun indice (x l) 
+	(if (atom l) 
+		nil 
+		(if (eql x (car l) 
+			1 ; ici le premier element de la liste est a la position 1
+			(+ 1 (indice x (cdr l) ) ) 
+	) )))
+;(indice 3 '(1 2 3 4 5)) ; renvoie 3
+
+(g) Définir la fonction <<count_occur(x L)>> qui compte le nombre le nombre 
+d'occurences d'un element
+
+(defun count (x l) 
+	(if (atom l) 
+		0 
+		(if (eql x (car l) )
+			(+ 1 (count x (cdr l))) 
+			(count x (cdr l))
+)))
+
+
+3.3.2 Fonctions d’arité variable
+
+Pour les questions suivantes, vous essaierez de les faire de manière classique, ou en utilisant
+« apply » ou « labels ».
+
+(a) Définir la fonctions « produit-0 » qui prend en entrée n’importe quel nombre
+d’arguments et renvoie leur produit. Elle renvoie 1 si aucun argument n’est fourni.
+
+(defun produit-0 (&rest args) 
+    (if (null args) 
+        1
+    (* (car args) (apply #'produit-0 (cdr args)))
+))
+
+(b) Définir la fonctions « produit-1 » qui prend en entrée au moins un (01) argument et
+renvoie leur produit
+
+(defun produit-1 (a &rest args)
+	(if (null args) 
+		a
+	(* a (car args) (apply #'produit-1 a (cdr args)))
+))
+
+(c) Définir la fonctions « produit-2 » qui prend en entrée au moins deux (02) arguments
+et renvoie leur produit.
+
+(defun produit-2 (a b &rest args) 
+	(if (null args) 
+		(* a b)
+	(* (car args) (apply #'produit-2 a b (cdr args)))
+		)
+	)
+
+************** 	reprend les meme fonction avec les sommes **********
+ (defun somme-0 (&rest args) 
+ 	(if (null args) 
+ 		0 
+ 		(+ (car args) (apply #'somme-0 (cdr args)))
+ ))
+
+ (defun somme-1 ( a &rest args) 
+ 	(if (null args)
+ 		a
+  (+ (car args) (apply #'somme-1 a (cdr args)))
+ ))
+
+ (defun somme-2 (a b &rest args) 
+ 	(if (null args) 
+ 		(+ a b)
+ 	(+ (car args) (apply #'somme-2 a b (cdr args)))
+ ))
+
+
+ ******************* dernier paramettre d'une fonction ***********
+(defun dernierParametre (&rest args) 
+	(if (null args)
+		nil
+		( (if (null (cdr args) 
+			(car args) )
+
+			(apply #'dernierParametre (cdr args)))
+		)
+	)
+)
+
+****************************************** LES LISTES *******************************
+
+--------------------  contatenation (append)----------
+1 une fonction qui contaten 2 liste sans utiliser append
+
+(defun concatenerSansAppend  (L1 L2) 
+
+	( cond 
+		((and (null L1) (null L2)) () )
+		( (atom L1) L2)
+		( (atom L2) L1)
+
+		(T (cons (car L1) (concatenerSansAppend  (cdr L1) L2)))
+
+	)
+)
+
+2  la fonction prend au moins 2 liste et les concatene
+(defun concat (L1 L2 &rest L3) 
+	(if (null L3)
+		(append L1 L2)
+
+		(append L1 (apply #'concat L2 L3))
+
+  )
+)
+
+(defun concat2ou3listes (L1 L2 &optional L3)
+
+	(
+		if (null L3)
+		(append L1 L2)
+
+		(append L1 L2 L3)
+	)
+)
+
+(d) Définir la fonction « concaténer (L1, L2, … ) » qui prend en entrée au moins une
+liste et retourne leur concaténation.
+
+
+
+(defun concaterner (L1 &rest L2) 
+
+	(
+	 if (null L2)
+	  L1
+	(append L1 (apply #'concaterner (car L2) (cdr L2)))
+	)
+
+)
+
+-------- concatener plusieur liste--------
+
+(defun  concatenerPlusieurs (&rest args) 
+	(if (null args) 
+		nil
+	(append (car args) (apply #'concatenerPlusieurs (cdr args))))
+)
+
+**************************** INTERSECTION (intersection)********************
+
+1 intersection de deux LISTES
+
+(defun intersec (L1 L2) 
+	(cond
+		((or (null L1) (null L2)) () )
+		(  (if (member (car L1) L2)
+				(cons (car L1) (intersec (cdr L1) L2)) 
+			 (intersection (cdr L1) L2)
+			)
+		)
+	)
+)
+
+2 intersection de plusieur liste--------
+
+(defun intersectionPlusieur (&rest args)
+	(if (null args) 
+		nil
+		(intersection (car args) (apply #'intersectionPlusieur (cdr args)))
+	)
+)
+
+3 au moins 2 liste 
+
+(defun intersectionAuMoins2 (L1 L2 &rest L3) 
+	(if (null L3) 
+		(intersection L1 L2) 
+		(intersection L1 (apply #'intersectionPlusieur L2  L3))
+	)
+)
+
+
+****************  UNION ***********
+
+(defun union2 (L1 L2) 
+
+	(cond 
+	  ( (and (atom L1) (atom L2) ) () )
+	  ( (atom L1) L2)
+	  ( (atom L2) L1)
+	  ( T
+	  	 (if (member (car L1 ) L2) 
+	  	 	(union2 (car L1) L2)
+
+	  	 	(cons (car L1) (union2 (cdr L1) L2))
+	  	 )
+	  	) 
+
+	)
+)
+
+(defun unionPlusieur (&rest args) 
+	(if (null args) 
+		()
+		(union (car args) (apply #'unionPlusieur (cdr args))) 
+	)
+)
+
+(defun unionAumoins2 (L1 L2 &rest L3 )
+	(if (null L3) 
+		(union L1 L2) 
+
+	(union L1 (apply#'unionAumoins2 L2 L3))
+	)
+)
+
+
+*** INVERSER UNE LISTES
+(defun inverser (L) 
+	(if (null L) 
+		nil
+		(if (null cdr L)
+			L
+		 (append (inserver (cdr L) ) (list (car L)))
+		)
+  )
+)
+
+
+(defun iota(n)
+	(if (= n 0)
+		nil
+		(if (= n 1)
+			(list 0)   #|   oubien '(0)   |#
+			(cons (- n 1) (iota (- n 1)))
+		)
+	)
+)
+
+(defun inconnue (a &rest b) 
+	(if (atom b) a 
+
+		(append (car b) (apply #'inconnue a (cdr b))))
+)
+EXO LIST AVEC append
+file:///C:/Users/PC/Documents/UFR_SAT/semestre_5/Paradigme/Exo_corrige%CC%81s_Lisp.pdf
+
+donner la fonction f (combinaison de car et cdr) pour que (f '((a (b c)) e)) donne c
+(cdr  '( (a (b c)) d (e f) ) )
